@@ -1,0 +1,8 @@
+{
+  "url": "https://example.com",
+  "instruction": "Cerca {{prodotto}}, imposta la taglia {{taglia}} e mostra i risultati disponibili.",
+  "values": {
+    "prodotto": "scarpe da trekking",
+    "taglia": "42"
+  }
+}

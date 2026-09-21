@@ -1,0 +1,9 @@
+{
+  "url": "https://www.saucedemo.com/",
+  "instruction": "Accedi inserendo {{username}} nel campo Username e {{password}} nel campo Password, poi premi Login. Nella pagina Products apri la scheda del prodotto {{prodotto}}. Nella scheda del prodotto premi Add to cart. Apri il carrello e verifica che contenga {{prodotto}} con quantità 1. Termina quando questa verifica è completata.",
+  "values": {
+    "username": "standard_user",
+    "password": "secret_sauce",
+    "prodotto": "Sauce Labs Backpack"
+  }
+}
