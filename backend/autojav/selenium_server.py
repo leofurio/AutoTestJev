@@ -2,6 +2,7 @@
 
 import atexit
 import os
+import sys
 import time
 import uuid
 from pathlib import Path
@@ -145,9 +146,7 @@ def fill(ref: str, value: str) -> dict:
     el = element(ref)
     if el.get_attribute("contenteditable") == "true":
         el.click()
-        el.send_keys(
-            Keys.COMMAND if os.name == "posix" and os.uname().sysname == "Darwin" else Keys.CONTROL, "a"
-        )
+        el.send_keys(Keys.COMMAND if sys.platform == "darwin" else Keys.CONTROL, "a")
         el.send_keys(Keys.BACKSPACE)
     else:
         el.clear()

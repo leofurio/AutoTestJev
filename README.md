@@ -4,7 +4,7 @@ Web app locale con backend **Python / FastAPI**, frontend **React / TypeScript /
 
 ## Avvio
 
-Requisiti: Python 3.11+, Node.js 20.19+ e Google Chrome. I comandi di setup sono per macOS/Linux.
+Requisiti: Python 3.11+, Node.js 20.19+ e Google Chrome. Setup e avvio funzionano con gli stessi comandi su Windows, macOS e Linux.
 
 ```bash
 npm run setup
@@ -12,6 +12,27 @@ npm start
 ```
 
 Apri **http://127.0.0.1:8000**. `npm run setup` installa le dipendenze, prepara `.env` se assente e compila il frontend. Il primo avvio di Selenium può scaricare ChromeDriver tramite Selenium Manager nella cartella `.runtime/selenium`.
+
+### Windows (PowerShell o Prompt dei comandi)
+
+Installa Python e Node.js, poi apri un nuovo terminale nella cartella del progetto. Non servono WSL, Git Bash o l'attivazione manuale di `.venv`.
+
+```powershell
+npm.cmd run setup
+notepad .env
+npm.cmd start
+```
+
+`npm.cmd` evita eventuali restrizioni di PowerShell su `npm.ps1`, senza modificare l'Execution Policy. Nel Prompt dei comandi puoi usare anche `npm`. Il setup cerca Python tramite `py -3`, `python` e `python3`, e usa `.venv\Scripts\python.exe`. Su macOS/Linux usa `.venv/bin/python`.
+
+Per scegliere un'installazione Python specifica, prima del setup in PowerShell:
+
+```powershell
+$env:AUTOJEV_PYTHON = "C:\Program Files\Python314\python.exe"
+npm.cmd run setup
+```
+
+Sostituisci il percorso con quello della tua installazione. Se trasferisci il progetto da un altro sistema, usa una copia senza `.venv` e `node_modules`: il setup li ricrea sul computer di destinazione. Il file `.env` esistente viene conservato. Per controllare l'interprete effettivo: `npm.cmd run python -- --version`.
 
 Per lo sviluppo con aggiornamento automatico:
 
@@ -78,7 +99,8 @@ React / Vite → FastAPI → Jev (OpenRouter Decisions)
 - Il client esegue il vero handshake MCP e verifica i tool con `list_tools`.
 - I candidati contengono riferimenti a elementi realmente osservati e chiavi del JSON; Jev restituisce solo l'ID della scelta.
 - Tool inclusi: `start_browser`, `navigate`, `observe`, `click`, `fill`, `select`, `scroll`, `back`, `wait`, `stop_browser`.
-- Il server MCP può essere avviato separatamente con `PYTHONPATH=backend .venv/bin/python -m autojav.selenium_server`.
+- Il server MCP può essere avviato separatamente con `npm run --silent mcp` (`npm.cmd run --silent mcp` in PowerShell). L'opzione `--silent` mantiene lo standard output riservato al protocollo MCP.
+- L'avvio usa un loop Proactor su Windows anche con auto-reload, così le pipe del processo MCP restano disponibili. La chiusura del launcher termina anche i suoi processi figli su Windows.
 - Una nuova osservazione segue ciascuna azione. Confidenza insufficiente, ripetizioni senza progresso e limite di azioni arrestano il ciclo.
 - L'arresto richiesto attende la chiamata in corso (timeout MCP 60 s / OpenRouter 45 s), poi impedisce nuove azioni e chiude il browser.
 - La scelta `done` è un giudizio del decisore: la schermata finale permette la verifica umana, non costituisce una garanzia formale di successo.
@@ -100,10 +122,12 @@ npm run build
 I test coprono validazione, sostituzione letterale, candidati, contratto OpenRouter con risposte simulate, errori, confidenza, arresto e ripetizioni. Per il test end-to-end con Chrome reale, con il server avviato:
 
 ```bash
-.venv/bin/python scripts/smoke_test.py
+npm run smoke
 ```
 
 Il test esegue la demo locale attraverso l'API, verifica le azioni MCP e la schermata finale. Non usa chiavi e non misura l'accuratezza di Jev live.
+
+`npm test` include test Node per percorsi Windows, individuazione di Python, argomenti con spazi e gestione degli errori, oltre ai test Python con handshake MCP reale. Il workflow `Platform compatibility` verifica setup, build, test e lint su runner Windows e Linux, con Python 3.11 e 3.14; viene eseguito dopo la pubblicazione delle modifiche su GitHub. Il workflow non avvia Chrome né usa la chiave OpenRouter.
 
 ## Riferimenti API
 

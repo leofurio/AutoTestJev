@@ -3,11 +3,14 @@
   "private": true,
   "version": "0.1.0",
   "scripts": {
-    "setup": "bash scripts/setup.sh",
+    "setup": "node scripts/setup.mjs",
     "dev": "node scripts/dev.mjs",
     "build": "npm --prefix frontend run build",
-    "start": ".venv/bin/python -m uvicorn autojav.main:app --app-dir backend --host 127.0.0.1 --port 8000",
-    "test": ".venv/bin/python -m pytest -q",
-    "lint": ".venv/bin/ruff check backend"
+    "start": "node scripts/start.mjs",
+    "python": "node scripts/python.mjs",
+    "mcp": "node scripts/python.mjs -m autojav.selenium_server",
+    "smoke": "node scripts/python.mjs scripts/smoke_test.py",
+    "test": "node --test scripts/runtime.test.mjs && node scripts/python.mjs -m pytest -q",
+    "lint": "node scripts/python.mjs -m ruff check backend"
   }
 }
